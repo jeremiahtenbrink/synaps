@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SynapsBrain } from '../components/SynapsBrain/SynapsBrain.js';
 import { CreateButton } from '../components/Button/CreateButton.js';
+import SvgComponent from '../images/svgAnimation/CardAnimation.js';
 
 /**
  * Testing
@@ -11,7 +12,7 @@ import { CreateButton } from '../components/Button/CreateButton.js';
  */
 export const Testing = () => {
   return ( <StyledTesting>
-    <CreateButton/>
+    <SvgComponent/>
   </StyledTesting> );
 };
 
