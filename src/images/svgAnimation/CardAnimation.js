@@ -7,7 +7,7 @@ function SvgComponent({background = "transparent", cardTop = "transparent", widt
     return (
         
         <svg width={width} height={height} viewBox="0 0 20 27" fill="none">
-                <LeftCard>
+            <LeftCard>
                 <path fill= {cardTop} d="M3.275 3l16.186.204-.275 21.85L3 24.85z" />
                 </LeftCard>
                 <path
