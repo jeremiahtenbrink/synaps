@@ -28,7 +28,7 @@ function SvgComponent({background = "transparent", cardTop = "transparent", widt
     )
 }
 const LeftCard = styled.div`
-    transform: rotateX(-45deg);
+    transform: rotateX(45deg);
     border: 2px solid red;
     transition: all 4s;
 `;
