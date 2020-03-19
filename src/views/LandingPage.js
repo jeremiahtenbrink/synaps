@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SmallLogo, SynapsButton, SynapsText } from '../components';
-import { devices } from '../utilities/breakpoints-device';
-import { useAppHooks } from '../customHooks/useAppHooks.js';
+import { useAppHooks, mediaQueries } from '../customHooks/useAppHooks.js';
 
 /**
  * Landing Page
@@ -11,17 +10,17 @@ import { useAppHooks } from '../customHooks/useAppHooks.js';
  * @example return (<LandingPage />);
  */
 export const LandingPage = props => {
-  const { history } = useAppHooks();
+  const { changePath } = useAppHooks();
+  
   const handleClick = name => {
     if( name === 'SignIn' ){
-      history.push( '/signIn' );
+      changePath( '/signIn' );
     }else{
-      history.push( '/signup' );
+      changePath( '/signup' );
     }
   };
   
   return (
-    
     <StyledLandingPage>
       <Mobile>
         <SmallLogo/>
@@ -103,7 +102,6 @@ export const LandingPage = props => {
         <Rectangle/>
       </Desktop>
     </StyledLandingPage>
-  
   );
 };
 
@@ -111,7 +109,7 @@ const Mobile = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 146px;
-  @media ${ devices.tablet } {
+  @media ${ mediaQueries.tablet } {
     display: none;
   }
 `;
@@ -120,7 +118,7 @@ const MobileHeader = styled.div``;
 
 const Desktop = styled.div`
   display: none;
-  @media ${ devices.tablet } {
+  @media ${ mediaQueries.tablet } {
   }
 `;
 
@@ -261,4 +259,3 @@ const Group4Text = styled.div`
   /* or 29px */
   color: #000000;
 `;
-

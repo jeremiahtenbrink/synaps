@@ -4,21 +4,16 @@ import { SynapsBrain } from '../components/SynapsBrain/SynapsBrain.js';
 import { CreateButton } from '../components/Button/CreateButton.js';
 import SvgComponent from '../images/svgAnimation/CardAnimation.js';
 import { SmallFlashCard } from '../components/SmallFlashCard/SmallFlashCard.js';
+import {PreviewDeckCards} from '../components/PreviewDeckCards/PreviewDeckCards.js';
 
-/**
- * Testing
- * @category Views
- * @component
- * @example return (<Testing />);
- */
 export const Testing = () => {
   return ( <StyledTesting>
-    <CreateButton/>
+    <PreviewDeckCards />
   </StyledTesting> );
+  
 };
 
 const StyledTesting = styled.div`
   margin: 0 auto;
   width: 400px;
 `;
-
