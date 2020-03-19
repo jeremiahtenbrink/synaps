@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { SynapsBrain } from '../components/SynapsBrain/SynapsBrain.js';
 import { CreateButton } from '../components/Button/CreateButton.js';
 import SvgComponent from '../images/svgAnimation/CardAnimation.js';
+import { SmallFlashCard } from '../components/SmallFlashCard/SmallFlashCard.js';
 
 /**
  * Testing
@@ -12,7 +13,7 @@ import SvgComponent from '../images/svgAnimation/CardAnimation.js';
  */
 export const Testing = () => {
   return ( <StyledTesting>
-    <SvgComponent/>
+    <CreateButton/>
   </StyledTesting> );
 };
 
