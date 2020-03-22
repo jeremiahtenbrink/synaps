@@ -8,7 +8,7 @@ import {PreviewDeckCards} from '../components/PreviewDeckCards/PreviewDeckCards.
 
 export const Testing = () => {
   return ( <StyledTesting>
-    <PreviewDeckCards />
+    <SvgComponent />
   </StyledTesting> );
   
 };
