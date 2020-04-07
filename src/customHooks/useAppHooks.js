@@ -1,13 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {themeState} from './useThemeContext.js';
-import {useStyledThemingRules} from './useStyledThemingRules.js';
-import {useLogger} from './useLogger.js';
-import {APP_VIEW_MOBILE} from './themingRules.js';
-import {useHistory} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
+import React, {useContext, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useChangePath} from "./useHistoryAndPath.js";
+import {useHistory} from "react-router-dom";
+import {useTheme} from "styled-components";
+import {
+  APP_VIEW_DESKTOP, APP_VIEW_MOBILE, SIZES,
+} from "../utilities/constants.js";
 
-export const APP_HOOKS_DEBUG_NAME = 'App Hooks';
+export const APP_HOOKS_DEBUG_NAME = "App Hooks";
+
 /**
  * Use App Hooks
  *
@@ -20,175 +21,155 @@ export const APP_HOOKS_DEBUG_NAME = 'App Hooks';
  * @returns UseAppHooksReturn
  *
  */
-
-export const useAppHooks = () => {
-  const {...stuff} = useContext(AppHooksContext);
-  const logger = useLogger(APP_HOOKS_DEBUG_NAME);
+export const useAppHooks = (nameOfCaller) => {
+  
+  const {setHookVariable, hooks} = useContext(AppHooksContext);
+  const logger = hooks.getLogger(USE_APP_HOOKS_STATE_DEBUG_NAME);
+  /**
+   * @typedef {object} Theme
+   * @property {function} changeTheme
+   * @property {ThemeState} themeState
+   * @property {object.<THEMING_VALUE, {string}>}
+   *
+   */
+  const theme = useTheme();
   const dispatch = useDispatch();
+  const changePath = useChangePath();
   const history = useHistory();
-
   useEffect(() => {
-    logger.logInfo('Hooks updated');
-    logger.logObject(stuff);
-  }, [stuff]);
-
-  const {
-    setHookVariable,
-    path,
-    pushedState,
-    appView,
-    width,
-    height,
-    theme,
-    checkAllRules,
-    setRules,
-  } = stuff;
-
+    logger.logVerbose(`Hooks updated for ${nameOfCaller}`);
+    
+  }, [
+    hooks,
+  ]);
+  
   const {usersState, photosState, cardsState, decksState} = useSelector(
-    reducerState => reducerState
+    reducerState => reducerState,
   );
-
+  
+  const getHooks = () => {
+    // debugger;
+    return {
+      theme: theme,
+      path: history.location.pathname,
+      pathPushedState: history.location.state,
+      setHookVariable,
+      dispatch,
+      usersState,
+      cardsState,
+      photosState,
+      decksState,
+      changePath,
+      ...hooks,
+    };
+  };
+  
   /**
    * @typedef {object} UseAppHooksReturn
-   *@property {function} setHookVariable
+   * @property {function} setHookVariable
+   * @property {function} getLogger
    * @property {Dispatch}  dispatch
-   * @property {History} history
    * @property {UsersReducerState} usersState
    * @property {CardsState} cardsState
    * @property {PhotoReducerState} photosState
    * @property {{}} deckState
    * @property {Theme} theme
-   * @property {function} setRules
+   * @property {ThemeRuleValues} themeRules
    * @property {AppView} appView
-   * @property {ChangePath} changePath
    * @property {APP_PATH} path,
-   * @property {any} pushedState
    * @property {number} height
+   * @property {ChangePath} changePath
+   * @property {{any}} pushedState
    * @property {number} width
+   * @property {number} height
    */
-
+  
   return {
+    path: history.location.pathname,
+    theme: theme,
+    setHookVariable,
     dispatch,
-    history,
     usersState,
     cardsState,
     photosState,
     decksState,
-    checkAllRules,
-    theme,
-    setRules,
+    changePath,
+    getHooks,
+    ...hooks,
+  };
+};
+
+export const USE_APP_HOOKS_STATE_DEBUG_NAME = "App Hooks State";
+
+/**
+ * Use App Hook State
+ * App Hooks Theme Provider State manager.
+ * @typedef {function} useAppAHooksState
+ *
+ * @param {function} getLogger
+ * @return {{setHookVariable: setHookVariable, hooks: {pushedState: {}, path:
+ *   string, appView: (string | string), width: number, getLogger: function,
+ *   history: *, height: number}}}
+ */
+export const useAppHooksState = (getLogger) => {
+  
+  const logger = getLogger(USE_APP_HOOKS_STATE_DEBUG_NAME);
+  logger.logVerbose("Provider for hooks state called.");
+  const history = useHistory();
+  const path = history.location.pathname;
+  const pushedState = {};
+  const appView = window.innerWidth > SIZES.tablet ? APP_VIEW_DESKTOP :
+    APP_VIEW_MOBILE;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  
+  /**
+   * @typedef {object} AppProviderState
+   * @property {object} pushedState
+   * @property {AppView} appView
+   * @property {number} width
+   * @property {number} height
+   * @property {function} getLogger
+   */
+  const initialState = {
     appView,
-    path,
-    pushedState,
     width,
     height,
+    getLogger,
+    history,
+  };
+  
+  logger.logVerbose("Hooks almost initialized for the App Provider. ");
+  logger.logObjectWithMessage(initialState, "Initial State");
+  
+  const [hooks, setHooks] = useState(initialState);
+  
+  const setHookVariable = (name, value, items = undefined) => {
+    
+    if(items === undefined){
+      logger.logVerbose(`Setting ${name} to new value`);
+      logger.logObject(value);
+      let newState;
+      newState = {...hooks, [name]: value};
+      setHooks(newState);
+    }else{
+      const newHooks = {...hooks};
+      items.forEach(item => {
+        newHooks[item.name] = item.value;
+      });
+      setHooks(newHooks);
+    }
+    
+  };
+  
+  useEffect(() => {
+    logger.logInfo("Hooks state changed in useAppHooksState,");
+  }, [hooks]);
+  
+  return {
+    hooks,
     setHookVariable,
   };
 };
 
-export const USE_APP_HOOKS_STATE_DEBUG_NAME = 'App Hooks State';
-
-export const useAppHooksState = () => {
-  const path = '/';
-  const dispatch = '';
-  const pushedState = {};
-  const appView = APP_VIEW_MOBILE;
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const history = {};
-  const logger = useLogger(USE_APP_HOOKS_STATE_DEBUG_NAME);
-  const {checkAllRules, setRules} = useStyledThemingRules();
-
-  const initialState = {
-    dispatch,
-    path,
-    pushedState,
-    appView,
-    width,
-    height,
-    theme: themeState,
-    history,
-    useAppHooksInit: false,
-    checkAllRules,
-    setRules,
-  };
-
-  logger.logInfo('Hooks almost initialized for the App Provider. ');
-  logger.logInfo('Initial State');
-  logger.logInfo(initialState);
-
-  const [hooks, setHooks] = useState(initialState);
-
-  const setHookVariable = (name, value) => {
-    logger.logInfo(`Setting ${name} to new value`);
-    logger.logObject(value);
-    let string = JSON.stringify(hooks);
-    let newhooks = JSON.parse(string);
-    newhooks[name] = value;
-    setHooks(newhooks);
-  };
-
-  return {hooks, setHookVariable};
-};
-
 export const AppHooksContext = React.createContext();
-
-/**
- * @type Sizes
- *
- */
-export const sizes = {
-  mobileS: 320,
-  mobileM: 375,
-  mobileL: 425,
-  tablet: 768,
-  laptop: 1024,
-  laptopL: 1440,
-  desktop: 2560,
-};
-
-/**
- * @category Utilities
- * @type {Devices}
- */
-export const mediaQueries = {
-  mobileS: `(min-width: ${sizes.mobileS}px)`,
-  mobileM: `(min-width: ${sizes.mobileM}px)`,
-  mobileL: `(min-width: ${sizes.mobileL}px)`,
-  tablet: `(min-width: ${sizes.tablet}px)`,
-  laptop: `(min-width: ${sizes.laptop}px)`,
-  laptopL: `(min-width: ${sizes.laptopL}px)`,
-  desktop: `(min-width: ${sizes.desktop}px)`,
-};
-
-export * from './useLogger.js';
-
-/**
- * @typedef {string} Color
- */
-
-/**
- * @typedef {object} Sizes
- * @property {number} mobileS '320px',
- * @property {number} mobileM '375px',
- * @property {number} mobileL '425px',
- * @property {number} tablet '768px',
- * @property {number} laptop '1024px',
- * @property {number} laptopL '1440px',
- * @property {number} desktop '2560px',
- */
-
-/**
- * @typedef {string} MediaQuery
- */
-
-/**
- * @typedef {object} Devices
- * @property {MediaQuery} mobileS   320px
- * @property {MediaQuery} mobileM   375px
- * @property {MediaQuery} mobileL   425px
- * @property {MediaQuery} tablet    768px
- * @property {MediaQuery} laptop    1024px
- * @property {MediaQuery} laptopL   1440px
- * @property {MediaQuery} desktop   2560px
- */

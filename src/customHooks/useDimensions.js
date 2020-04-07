@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AppHooksContext, useLogger } from "./useAppHooks.js";
+import React, {useState, useEffect, useContext} from "react";
+import {AppHooksContext} from "./useAppHooks.js";
 
 const USE_DIMENSIONS_DEBUG_NAME = "Use Dimensions";
 /**
@@ -14,43 +14,46 @@ const USE_DIMENSIONS_DEBUG_NAME = "Use Dimensions";
 
 export const useDimensions = () => {
   
-  const { height, width, setHookVariable } = useContext( AppHooksContext );
-  const logger = useLogger( USE_DIMENSIONS_DEBUG_NAME );
+  const {hooks, setHookVariable} = useContext(
+    AppHooksContext);
+  const {getLogger, width, height} = hooks;
+  const logger = getLogger(USE_DIMENSIONS_DEBUG_NAME);
   
-  useEffect( () => {
-    window.addEventListener( "resize", updateDimensions );
-    logger.logInfo( "Set up add event listener for window resize." );
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    logger.logVerbose("Set up add event listener for window resize.");
     return () => {
-      window.removeEventListener( "resize", updateDimensions );
-      logger.logInfo( "Removed listen for resize." );
+      window.removeEventListener("resize", updateDimensions);
+      logger.logVerbose("Removed listen for resize.");
     };
-  }, [] );
+  }, []);
   
   let timer = null;
   
   const updateDimensions = () => {
-    logger.logInfo( "Update dimensions called" );
+    
+    logger.logVerbose("Update dimensions called");
     
     const update = () => {
-      logger.logInfo( "Update called." );
-      if( width !== window.innerWidth ){
-        logger.logInfo( "Updating width." );
-        setHookVariable( "width", window.innerWidth );
+      logger.logVerbose("Update called.");
+      if(width !== window.innerWidth){
+        logger.logVerbose("Updating width.");
+        setHookVariable("width", window.innerWidth);
       }
-      if( height !== window.innerHeight ){
-        logger.logInfo( "Updating height." );
-        setHookVariable( "height", window.innerHeight );
+      if(height !== window.innerHeight){
+        logger.logVerbose("Updating height.");
+        setHookVariable("height", window.innerHeight);
       }
       
       timer = null;
     };
     
-    if( timer ){
-      logger.logInfo( "Clearing the timer" );
-      clearTimeout( timer );
+    if(timer){
+      logger.logVerbose("Clearing the timer");
+      clearTimeout(timer);
     }
-    logger.logInfo( "Setting the timer for debounce." );
-    timer = setTimeout( update, 200 );
+    logger.logVerbose("Setting the timer for debounce.");
+    timer = setTimeout(update, 200);
   };
   
 };

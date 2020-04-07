@@ -1,18 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {NavBar, Footer, RouteContainer} from './components';
+import {SvgBrainPic} from './svgComponents';
 import PropTypes from 'prop-types';
 import {Alert} from 'antd';
-import {
-  useAppHooks,
-  mediaQueries,
-  sizes,
-  useLogger,
-} from './customHooks/useAppHooks.js';
+import {useAppHooks} from './customHooks/useAppHooks.js';
 import {useAuthStateChange} from './customHooks/useAuthStateChange.js';
-import {SynapsBrain} from './components';
-import {APP_VIEW_DESKTOP} from './customHooks/themingRules.js';
-import {useHooksInit} from './customHooks/useHooksInit.js';
+import {THEMING_VARIABLES, THEMING_VALUES} from './customHooks/themingRules.js';
+import theming from 'styled-theming';
+import {useTheming} from './customHooks/useTheming.js';
+import {MEDIA_QUERIES} from './utilities/constants.js';
 
 /**
  * App
@@ -20,15 +17,17 @@ import {useHooksInit} from './customHooks/useHooksInit.js';
  * @component
  * @example return (<App />);
  */
-function App(props) {
+export default function App(props) {
   const [alertMessage, setAlert] = useState('');
-  const {theme, usersState, pathname, appView} = useAppHooks();
-  const logger = useLogger('App View');
+  const {theme, usersState, pathname, appView, getHooks} = useAppHooks('App');
+  const getValue = useTheming('App.js');
+
+  const logger = props.logger;
 
   useEffect(() => {
-    logger.logInfo('App view rendered.');
+    logger.logVerbose('App view rendered.');
   }, []);
-  useAuthStateChange();
+  useAuthStateChange(getHooks);
 
   useEffect(() => {
     if (usersState.registerError && !alertMessage) {
@@ -37,23 +36,34 @@ function App(props) {
   }, [usersState]);
 
   return (
-    <StyledApp className="App" theme={theme}>
-      {appView === APP_VIEW_DESKTOP && (
-        <SynapsBrain
-          zIndex={15}
-          width={'100vw'}
-          height={'100vh'}
-          position={'absolute'}
-          backgroundColor={
-            pathname === '/preview' ? theme.primaryColor : 'transparent'
-          }
-          color={pathname === '/preview' ? '#153F6E' : '#EEECE8'}
-          opacity={1}
-          strokeColor={'transparent'}
-          viewBox={'-20 -20 400 400'}
+    <StyledApp className="App">
+      {theme.BRAIN_SVG !== THEMING_VALUES.HIDDEN && (
+        <SvgBrainPic
+          maxWidth={'1500px'}
+          maxHeight={'1500px'}
+          height={getValue(THEMING_VARIABLES.BRAIN_SVG, {
+            [THEMING_VALUES.BOTTOM]: '1500px',
+            [THEMING_VALUES.TOP]: '1500px',
+            [THEMING_VALUES.MOBILE]: '624px',
+          })}
+          width={getValue(THEMING_VARIABLES.BRAIN_SVG, {
+            [THEMING_VALUES.BOTTOM]: '1500px',
+            [THEMING_VALUES.TOP]: '1500px',
+            [THEMING_VALUES.MOBILE]: '624px',
+          })}
+          left={'50%'}
+          transform={'translate(-50%, 0)'}
+          fill={getValue(THEMING_VARIABLES.BACKGROUND, {
+            [THEMING_VALUES.DARK]: theme.themeState.brainPicDark,
+            [THEMING_VALUES.LIGHT]: theme.themeState.brainPicLight,
+          })}
+          top={getValue(THEMING_VARIABLES.BRAIN_SVG, {
+            [THEMING_VALUES.BOTTOM]: '800px',
+            [THEMING_VALUES.TOP]: '146px',
+            [THEMING_VALUES.MOBILE]: '624px',
+          })}
         />
       )}
-
       {alertMessage && (
         <Alert
           type={'error'}
@@ -67,9 +77,9 @@ function App(props) {
           }}
         />
       )}
-      <NavBar />
-      <RouteContainer />
-      <Footer />
+      <NavBar getHooks={getHooks} />
+      <RouteContainer getHooks={getHooks} />
+      <Footer getHooks={getHooks} />
     </StyledApp>
   );
 }
@@ -79,11 +89,21 @@ App.propTypes = {
   history: PropTypes.object,
 };
 
+const backgroundColor = theming(THEMING_VARIABLES.BACKGROUND, {
+  [THEMING_VALUES.DARK]: ({theme}) => {
+    return theme.themeState.primaryColor;
+  },
+  [THEMING_VALUES.LIGHT]: ({theme}) => {
+    return theme.themeState.navBarLight;
+  },
+});
+
 const StyledApp = styled.div`
+  background: ${backgroundColor};
   box-sizing: border-box;
   position: relative;
   color: ${props => props.theme.color};
-  padding: 75px 0 50px 0;
+  padding: 0 auto;
   text-align: center;
   flex-direction: column;
   display: flex;
@@ -92,30 +112,8 @@ const StyledApp = styled.div`
   align-items: center;
   max-height: 100vh;
   min-height: 100vh;
-  overflow-y: hidden;
+  overflow: hidden;
 
-  @media ${mediaQueries.tablet} {
-    background: ${props => {
-      if (props.pathname === '/preview') {
-        return props.theme.primaryColor;
-      } else {
-        return '#F6F5F3';
-      }
-    }};
+  @media ${MEDIA_QUERIES.tablet} {
   }
 `;
-
-export default App;
-
-/**
- * @typedef { function } Dispatch
- * @param { function } function
- * @returns none
- *
- */
-
-/**
- * @typedef { object } User
- * @property { string } uid
- * @property { string } photoURL
- */

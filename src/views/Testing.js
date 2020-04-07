@@ -15,5 +15,5 @@ export const Testing = () => {
 
 const StyledTesting = styled.div`
   margin: 0 auto;
-  width: 400px;
+  width: 800px;
 `;

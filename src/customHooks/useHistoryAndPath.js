@@ -1,54 +1,50 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useLogger } from "./useLogger.js";
-import { AppHooksContext } from "./useAppHooks.js";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect, useContext} from "react";
+import {AppHooksContext} from "./useAppHooks.js";
+import {useHistory} from "react-router-dom";
+import {useComparPrevContext} from "./useComparPrevContext.js";
 
-export const USE_HISTORY_DEBUG = "Use History";
+export const USE_CHANGE_PATH_DEBUG = "Use Change Path";
 
 /**
- * Use History and Path
- * @category Custom Hooks
- * @function
- * @returns {{pushedState: any, path: string, changePath: ChangePath}}
+ * @typedef {function} UseChangePath
+ * @return {changePath}
  */
-export const useHistoryAndPath = () => {
+export const useChangePath = () => {
+  
+  const history = useHistory();
+  const {hooks, path, pushedState, setHookVariable} = useContext(
+    AppHooksContext);
+  const logger = hooks.getLogger(USE_CHANGE_PATH_DEBUG);
+  
+  /**
+   * Change Path
+   * @typedef {function} ChangePath
+   *
+   * @function
+   * @name changePath
+   * @param {string} pathToChangeTo
+   * @param {{} | Any} [stateToPush]
+   * @returns void
+   */
+  const changePath = (pathToChangeTo, stateToPush = null) => {
     
-    const { path, pushedState, setHookVariable } = useContext(
-      AppHooksContext );
-    const history = useHistory();
-    const logger = useLogger( USE_HISTORY_DEBUG );
-    
-    useEffect( () => {
-      if( history.location.pathname !== path ){
-        setHookVariable( "path", history.location.pathname );
+    logger.logVerbose(`Change path called.`);
+    pathToChangeTo = pathToChangeTo.toLowerCase();
+    if(pathToChangeTo !== undefined && pathToChangeTo !==
+      history.location.pathname){
+      logger.logVerbose("Pushing  new url: " + pathToChangeTo);
+      if(stateToPush){
+        history.push(pathToChangeTo, stateToPush);
+      }else{
+        history.push(pathToChangeTo);
       }
       
-      if( history.location.state !== pushedState ){
-        setHookVariable( "pushedState", history.location.state );
-      }else{
-        logger.logWarning( "No history object detected." );
-      }
-      
-    }, [ history.location.pathname ] );
+    }
     
-    /**
-     * Change Path
-     * @typedef ChangePath
-     *
-     * @function
-     * @name changePath
-     * @param {string} path
-     * @param {{} | Any} [stateToPush]
-     * @returns void
-     */
-    const changePath = ( path, stateToPush = null ) => {
-      if( stateToPush ){
-        history.push( path, stateToPush );
-      }else{
-        history.push( path );
-      }
-    };
-    
-    return { changePath, path, pushedState };
-  }
-;
+    logger.logVerbose("Not updaing path: " + pathToChangeTo);
+  };
+  
+  return changePath;
+  
+};
+
