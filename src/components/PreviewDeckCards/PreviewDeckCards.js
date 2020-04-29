@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {Card, Icon} from 'antd';
 import {CreateButton} from '../Button/CreateButton.js';
-import {APP_VIEW_DESKTOP} from '../../utilities/constants.js';
+import {
+  APP_VIEW_DESKTOP,
+  MEDIA_QUERIES,
+  THEME,
+} from '../../utilities/constants.js';
 
 /**
  * Preview Deck Cards

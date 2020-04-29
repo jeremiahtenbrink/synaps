@@ -116,7 +116,6 @@ export const getThemingRules = () => [
       APP_PATHS.SIGN_UP_PATH,
       APP_PATHS.CREATE_DECK_PATH,
       APP_PATHS.LANDING_PAGE,
-
       APP_PATHS.DASHBOARD_PATH,
     ],
     APP_VIEW_DESKTOP
@@ -126,12 +125,6 @@ export const getThemingRules = () => [
     THEMING_VALUES.DARK,
     [APP_PATHS.SIGN_IN_PATH, APP_PATHS.LANDING_PAGE],
     APP_VIEW_MOBILE
-  ),
-  createRule(
-    THEMING_VARIABLES.BACKGROUND,
-    THEMING_VALUES.LIGHT,
-    [],
-    APP_VIEW_DESKTOP
   ),
   createRule(
     THEMING_VARIABLES.BACKGROUND,

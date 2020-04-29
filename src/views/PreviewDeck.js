@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import theming from 'styled-theming';
 import {getAllCardsForDeck} from '../actions/cardActions.js';
 import {
-  PreviewDeckCards, SearchBar, SynapsButton, TitleText,
+  PreviewDeckCards,
+  SearchBar,
+  SynapsButton,
+  TitleText,
 } from '../components';
 import {APP_PATHS, THEME} from '../utilities/constants.js';
 import {Alert, Icon} from 'antd';
 import {
-  THEMING_VALUES, THEMING_VARIABLES,
+  THEMING_VALUES,
+  THEMING_VARIABLES,
 } from '../customHooks/themingRules.js';
 
 /**
@@ -19,7 +23,7 @@ import {
  */
 export const PreviewDeck = ({getHooks}) => {
   // @type CardState
-  debugger;
+
   const {
     cardsState,
     pathPushedState,
@@ -55,7 +59,7 @@ export const PreviewDeck = ({getHooks}) => {
   const getAlert = () => {
     if (cardsState.error) {
       return (
-        <Alert message={cardsState.error.message} type="warning" closable/>
+        <Alert message={cardsState.error.message} type="warning" closable />
       );
     }
   };
@@ -63,15 +67,19 @@ export const PreviewDeck = ({getHooks}) => {
   return (
     <StyledPreviewDeck data-testid={'preview-deck-container'}>
       {getAlert()}
-      <TopContainer>
-        <StyledIconLeft type="left"/>
+      <TopContainer
+        style={{
+          marginTop: '2%',
+        }}
+      >
+        <StyledIconLeft type="left" />
         <p onClick={() => changePath(APP_PATHS.DASHBOARD_PATH)}>Back</p>
+
         <SearchContainer>
           <SearchBar
             height={'23px'}
             borderRadius={'14px'}
-            onSearch={() => {
-            }}
+            onSearch={() => {}}
           />
         </SearchContainer>
         <p
@@ -85,7 +93,15 @@ export const PreviewDeck = ({getHooks}) => {
         text={(pathPushedState && pathPushedState.deck_name) || 'Preview'}
       />
       <StyledPreviewDeckHolder>
-        <PreviewDeckCards cardType={'card'} key={0} getHooks={getHooks}/>
+        <PreviewDeckCards
+          cardType={'card'}
+          key={0}
+          getHooks={getHooks}
+          style={{
+            width: '150px',
+            height: '196px',
+          }}
+        />
         {Object.values(cardsState.cards)
           .filter(card => card.deck_id === pathPushedState.deck_id)
           .map(card => {
@@ -97,6 +113,10 @@ export const PreviewDeck = ({getHooks}) => {
                 key={card.card_id}
                 selected={!!cardsSelected[card.card_id]}
                 card={card}
+                style={{
+                  width: '150px',
+                  height: '196px',
+                }}
               />
             );
           })}
@@ -104,7 +124,7 @@ export const PreviewDeck = ({getHooks}) => {
       <StudyButton
         onClick={() => changePath(APP_PATHS.QUIZ_MODE, pathPushedState)}
         height={'43px'}
-        width={'88%'}
+        width={'17%'}
         text={'Study Deck'}
         type={'secondary'}
       />
@@ -116,13 +136,11 @@ const StudyButton = styled(SynapsButton)`
   box-sizing: border-box;
   align-self: center;
   font-size: 24px;
-  border-radius: 5px;
-  margin-top: 20px;
+  border-radius: 33px;
+  position: inherit;
+  margin-left: -62%;
+  margin-top: -50%;
   margin-bottom: 20px;
-  > span {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
 `;
 
 const TopContainer = styled.div`
@@ -144,7 +162,7 @@ const SearchContainer = styled.div`
 const previewDeckHeight = theming(THEMING_VARIABLES.FOOTER, {
   [THEMING_VALUES.VISIBLE]: window.innerHeight - THEME.navBarTopHeight + 'px',
   [THEMING_VALUES.HIDDEN]:
-  window.innerHeight - THEME.navBarTopHeight - 95 + 'px',
+    window.innerHeight - THEME.navBarTopHeight - 95 + 'px',
 });
 
 const marginBottom = theming(THEMING_VARIABLES.FOOTER, {
@@ -164,18 +182,20 @@ const StyledPreviewDeck = styled.div`
   background: ${props => props.theme.themeState.navBarLight};
 
   left: 152px;
-
+  margin-left: 12%;
+  margin-top: 7%;
   background: #ffffff;
   border-radius: 10px;
 `;
 
 const StyledPreviewDeckHolder = styled.div`
-  overflow-y: scroll;
   max-height: 100%;
-  max-width: 90%;
+  max-width: 86%;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  overflow: scroll;
   padding-bottom: 150px;
+  margin-left: 8%;
+  margin-top: 7%;
+  overflow: auto;
 `;
