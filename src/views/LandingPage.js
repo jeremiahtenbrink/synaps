@@ -13,28 +13,31 @@ import {MEDIA_QUERIES, THEME} from '../utilities/constants.js';
  */
 export const LandingPage = ({getHooks}) => {
   const {changePath, theme} = getHooks();
-  
+
   useEffect(() => {
-  
-  }, []);
-  
+    debugger;
+  }, [changePath]);
+
   const handleClick = name => {
-    if(name === 'SignIn'){
+    if (name === 'SignIn') {
       changePath('/signIn');
-    }else{
+    } else {
       changePath('/signup');
     }
   };
-  
+
   return (
     <StyledLandingPage data-testid={'landing-page'}>
       <Mobile data-testid={'landing-page-mobile'}>
-        <SvgBrainPaths svgFill={THEME.COLOR_WHITE} strokeWidth={'1'}
-                       stroke={THEME.COLOR_WHITE}
-                       svgWidth={'100%'}
-                       height={'100%'}/>
+        <SvgBrainPaths
+          svgFill={THEME.COLOR_WHITE}
+          strokeWidth={'1'}
+          stroke={THEME.COLOR_WHITE}
+          svgWidth={'100%'}
+          height={'100%'}
+        />
         <MobileHeader>
-          <SvgSynapsLogoText fill={theme.themeState.navBarLight}/>
+          <SvgSynapsLogoText fill={theme.themeState.navBarLight} />
         </MobileHeader>
         <SynapsButton
           text={'Sign In'}
@@ -68,12 +71,12 @@ export const LandingPage = ({getHooks}) => {
         <HeaderName>
           <h1>Synaps</h1>
         </HeaderName>
-        <Vector/>
-        <FlashCard/>
+        <Vector />
+        <FlashCard />
         <Headline>
           <h1 className="headline">Big CTA Headline</h1>
         </Headline>
-        <CTAButton/>
+        <CTAButton />
         <Paragraph>
           <p>
             You get this app. You should really get this app. Something else
@@ -88,27 +91,27 @@ export const LandingPage = ({getHooks}) => {
             amazing science student. Here’s how we do it
           </p>
         </Paragraph2>
-        <Group1/>
+        <Group1 />
         <Group1Text>
           Here is more about this amazing and super helpful app that will make
           you an amazing science student. Here’s how we do it
         </Group1Text>
-        <Group2/>
+        <Group2 />
         <Group2Text>
           Here is more about this amazing and super helpful app that will make
           you an amazing science student. Here’s how we do it
         </Group2Text>
-        <Group3/>
+        <Group3 />
         <Group3Text>
           Here is more about this amazing and super helpful app that will make
           you an amazing science student. Here’s how we do it
         </Group3Text>
-        <Group4/>
+        <Group4 />
         <Group4Text>
           Here is more about this amazing and super helpful app that will make
           you an amazing science student. Here’s how we do it
         </Group4Text>
-        <Rectangle/>
+        <Rectangle />
       </Desktop>
     </StyledLandingPage>
   );
