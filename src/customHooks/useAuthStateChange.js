@@ -23,7 +23,7 @@ export const useAuthStateChange = getHooks => {
       if (user) {
         dispatch(signedIn(user));
         if (path === '/signin' || path === '/signup' || path === '/') {
-          changePath('/');
+          changePath('/dashboard');
         }
       } else {
         dispatch(signOut());
