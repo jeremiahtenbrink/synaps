@@ -5,6 +5,7 @@ import SvgSynapsLogoText from '../svgComponents/SvgSynapsLogoText.js';
 import {SvgBrainPaths} from '../svgComponents';
 import {MEDIA_QUERIES, THEME} from '../utilities/constants.js';
 import {Icon} from 'antd';
+import ScrollIntoView from 'react-scroll-into-view';
 
 /**
  * Landing Page
@@ -70,14 +71,37 @@ export const LandingPage = ({getHooks}) => {
             height={'62px'}
           />
         </ButtonContainer>
-        <LearnMoreMobile>
-          <LearnMorePrompt>Learn More</LearnMorePrompt>
-          <Icon
-            type="double-right"
-            rotate="90"
-            style={{fontSize: '30px', color: '#4cb69f'}}
-          />
-        </LearnMoreMobile>
+        <ScrollIntoView selector="#footer">
+          <LearnMoreMobile>
+            <LearnMorePrompt>Learn More</LearnMorePrompt>
+            <Icon
+              type="double-right"
+              rotate="90"
+              style={{fontSize: '30px', color: '#4cb69f'}}
+            />
+          </LearnMoreMobile>
+        </ScrollIntoView>
+
+        <div style={{marginTop: '40px'}} id="footer">
+          Scroll target element
+        </div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
+        <div>lorem ipsum</div>
       </Mobile>
       <Desktop>
         {/* {I still need to add in desktop view markup here} */}
