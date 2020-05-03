@@ -4,6 +4,7 @@ import {SynapsButton} from '../components';
 import SvgSynapsLogoText from '../svgComponents/SvgSynapsLogoText.js';
 import {SvgBrainPaths} from '../svgComponents';
 import {MEDIA_QUERIES, THEME} from '../utilities/constants.js';
+import {Icon} from 'antd';
 
 /**
  * Landing Page
@@ -69,6 +70,14 @@ export const LandingPage = ({getHooks}) => {
             height={'62px'}
           />
         </ButtonContainer>
+        <LearnMoreMobile>
+          <LearnMorePrompt>Learn More</LearnMorePrompt>
+          <Icon
+            type="double-right"
+            rotate="90"
+            style={{fontSize: '30px', color: '#4cb69f'}}
+          />
+        </LearnMoreMobile>
       </Mobile>
       <Desktop>
         {/* {I still need to add in desktop view markup here} */}
@@ -78,6 +87,8 @@ export const LandingPage = ({getHooks}) => {
 };
 
 const Mobile = styled.div`
+  width: 375px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   margin: 75px auto 0 auto;
@@ -106,4 +117,20 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+`;
+
+const LearnMoreMobile = styled.div`
+  height: 60px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 91px;
+`;
+
+const LearnMorePrompt = styled.h1`
+  font-style: SemiBold;
+  font-size: 16px;
+  color: #4cb69f;
 `;
